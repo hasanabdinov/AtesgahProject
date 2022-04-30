@@ -51,11 +51,11 @@ namespace WebProject
             services.AddSingleton(mapper);
             #endregion
 
-            #region Services
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<ILoanService, LoanService>();
-            services.AddTransient<IClientService, ClientService>();
-            services.AddTransient<IInvoiceService, InvoiceService>();
+            #region Services Binding
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ILoanService, LoanService>();
+            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IInvoiceService, InvoiceService>();
 
             #endregion
 

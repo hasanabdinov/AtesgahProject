@@ -11,16 +11,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12 col-md-12">
-            @*@Html.Partial("_PartialViewInvoicesOfLoan", @Model.Loans)*@
             <partial name="_PartialViewAllLoanList" model="Model.Loans">
         </div>
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-6 col-md-6 text-right">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Add New</button>
-                </div>
-                <div class="col-6 col-md-6 text-left">
-                    <button class="btn btn-outline-danger" id="exitProjectButton">Exit</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Add New Loan</button>
                 </div>
             </div>
         </div>
@@ -34,9 +30,9 @@
             <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
                  aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Create New Loan</h5>
+                    <div class="modal-content" >
+                        <div class="modal-header" style="background-color:lightblue; color:white;">
+                            <h5 class="modal-title" id="exampleModalLongTitle" style="text-align:center">Create New Loan</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -53,10 +49,10 @@
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1" class="font-weight-bold">Client</label>
                                                     <select class="form-control" required id="listClientAdded">
-                                                        <option value="0" selected>Secin</option>
+                                                        <option value="0" selected>-- Select -- </option>
                                                         @foreach (var client in Model.Clients)
                                                         {
-                                                            <option data-clientid="@client.Id" data-phonenumber="@client.TelephoneNr" value="@client.Id">@client.Name @client.Surname</option>
+                                                    <option data-clientid="@client.Id" data-phonenumber="@client.TelephoneNr" value="@client.Id">@client.Id | @client.Name @client.Surname</option>
                                                         }
                                                     </select>
                                                 </div>
@@ -74,7 +70,7 @@
                                                 <div class="form-group">
                                                     <label for="loanPeriodInput" class="font-weight-bold">Loan Period(months)</label>
                                                     <select required class="form-control" id="loanPeriodInput" name="loanPeriodInput">
-                                                        <option value="0" selected disabled>Secin</option>
+                                                        <option value="0" selected disabled>-- Select -- </option>
                                                         @for (int i = Model.MinPayPeriod; i <= Model.MaxPayPeriod; i++)
                                                         {
                                                             <option value="@i">@i</option>
@@ -83,13 +79,13 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="loanInterestRate" class="font-weight-bold">Monthly Interest Rate</label>
-                                                    <input type="number" min="1" class="form-control" id="loanInterestRate" name="loanInterestRate" placeholder="Daxil edin" required>
+                                                    <input type="number" min="1" class="form-control" id="loanInterestRate" name="loanInterestRate" placeholder="Number of Months" required>
                                                     <span class="text-danger" id="errorMsgInterestRate" style="display:none;">You can give interest large than 0</span>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="payoutDateInput" class="font-weight-bold">Payout Date</label>
-                                                    <input type="date" class="form-control" required id="payoutDateInput" name="payoutDateInput" placeholder="Daxil edin">
-                                                </div>
+                                                    <input type="date" class="form-control" required id="payoutDateInput" name="payoutDateInput" placeholder="Number of Months">
+                                                </div style="background-color:lightblue; color:white;">
                                                 <button type="button" id="calculateInvoice"
                                                         class="btn btn-outline-dark float-right">
                                                     Calculate Invoices
@@ -176,13 +172,13 @@
             });
 
         });
-                //$(function () {
+                        //$(function () {
 
-                //    $("#calculateInvoice").click(function ()
-                //    {
-                //        console.log("test");
-                //    })
+                        //    $("#calculateInvoice").click(function ()
+                        //    {
+                        //        console.log("test");
+                        //    })
 
-                //});
+                        //});
     </script>
 }
