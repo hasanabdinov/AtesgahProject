@@ -1,0 +1,188 @@
+﻿@model LoanDto
+@{
+    ViewData["Title"] = "Loan Page";
+}
+
+@section Head{
+    <link rel="stylesheet" type="text/css" href="~/css/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/jquery.dataTables.min.css" />
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-12">
+            @*@Html.Partial("_PartialViewInvoicesOfLoan", @Model.Loans)*@
+            <partial name="_PartialViewAllLoanList" model="Model.Loans">
+        </div>
+        <div class="col-12 col-md-12">
+            <div class="row">
+                <div class="col-6 col-md-6 text-right">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">Add New</button>
+                </div>
+                <div class="col-6 col-md-6 text-left">
+                    <button class="btn btn-outline-danger" id="exitProjectButton">Exit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modalCreateNewInvoice">
+    <div class="container">
+        <div class="row">
+            <div class="modal fade bd-example-modal-lg" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Create New Loan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="pageMain">
+                                <div class="container">
+                                    <form method="post" action="/Invoice/CalculatedInvoice">
+                                        <div class="row">
+                                            <div class="col-3 col-md-3">&nbsp;</div>
+                                            <div class="col-12 col-md-12">
+                                                <h5>Loan Details</h5>
+                                                <hr>
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1" class="font-weight-bold">Client</label>
+                                                    <select class="form-control" required id="listClientAdded">
+                                                        <option value="0" selected>Secin</option>
+                                                        @foreach (var client in Model.Clients)
+                                                        {
+                                                            <option data-clientid="@client.Id" data-phonenumber="@client.TelephoneNr" value="@client.Id">@client.Name @client.Surname</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="phoneSelectedInput" class="font-weight-bold">Telephone Number</label>
+                                                    <input type="tel" class="form-control" maxlength="17" id="phoneSelectedInput" name="phoneSelectedInput" placeholder="Write phone number">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="loanAmountRange" class="font-weight-bold">Loan:Amount</label>
+                                                    <input type="number" required min="100" max="5000" class="form-control" id="loanAmountRange" name="loanAmountRange" placeholder="Write Loan Amount">
+                                                    <span class="text-danger" id="errorMsgLoanAmount" style="display:none;">You can give Amount 100 to 5000 only</span>
+
+                                                    <div class="col-6 col-md-6"></div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="loanPeriodInput" class="font-weight-bold">Loan Period(months)</label>
+                                                    <select required class="form-control" id="loanPeriodInput" name="loanPeriodInput">
+                                                        <option value="0" selected disabled>Secin</option>
+                                                        @for (int i = Model.MinPayPeriod; i <= Model.MaxPayPeriod; i++)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="loanInterestRate" class="font-weight-bold">Monthly Interest Rate</label>
+                                                    <input type="number" min="1" class="form-control" id="loanInterestRate" name="loanInterestRate" placeholder="Daxil edin" required>
+                                                    <span class="text-danger" id="errorMsgInterestRate" style="display:none;">You can give interest large than 0</span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="payoutDateInput" class="font-weight-bold">Payout Date</label>
+                                                    <input type="date" class="form-control" required id="payoutDateInput" name="payoutDateInput" placeholder="Daxil edin">
+                                                </div>
+                                                <button type="button" id="calculateInvoice"
+                                                        class="btn btn-outline-dark float-right">
+                                                    Calculate Invoices
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </form>
+
+                                    <div class="row">
+                                        <div class="col-12 mt-3">
+                                            <div class="tableLoanLists d-none" id="tableLoanLists">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- SHOW LOAN DETAILS ON MODAL -->
+<div class="container">
+    <div class="row">
+        <div class="modal fade bd-example-modal-lg" id="clickAfterTableRowModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="afterClickRowTableModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="afterClickRowTableModalLongTitle">Loan Details : <span id="selectedClientInformation"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="pageMain" id="invoicesContainer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SHOW LOAN DETAILS ON MODAL -->
+
+@section Scripts{
+    <script type="text/javascript" src="~/js/datatables.min.js"></script>
+    <script src="~/js/myProject.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#LoanClientList').DataTable();
+        });
+
+        $("#loanAmountRange").keyup(function () {
+            if ($('#loanAmountRange').val() > 5000 || $('#loanAmountRange').val() < 100) {
+                $('#errorMsgLoanAmount').show();
+            }
+            else {
+                $('#errorMsgLoanAmount').hide();
+            }
+        });
+
+        $("#loanInterestRate").keyup(function () {
+            if ($('#loanInterestRate').val() <= 0) {
+                $('#errorMsgInterestRate').show();
+            }
+            else {
+                $('#errorMsgInterestRate').hide();
+            }
+        });
+
+        $(function () {
+
+            $("#listClientAdded").change(function () {
+                let clientNumber = $("#listClientAdded").find(":selected").data("phonenumber");
+                $("#phoneSelectedInput").val(clientNumber);
+            });
+
+        });
+                //$(function () {
+
+                //    $("#calculateInvoice").click(function ()
+                //    {
+                //        console.log("test");
+                //    })
+
+                //});
+    </script>
+}

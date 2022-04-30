@@ -1,0 +1,23 @@
+﻿@model IEnumerable<LoanDetailDto>
+
+    <table id="LoanClientList">
+        <thead>
+            <tr>
+                <th>Client ID</th>
+                <th>Client</th>
+                <th>Loan Amount</th>
+                <th>Payout Date</th>
+            </tr>
+        </thead>
+            <tbody>
+                @foreach (var loan in Model)
+                {
+                    <tr data-toggle="modal" class="clickedRow" data-id="@loan.LoanID" data-target="#clickAfterTableRowModalLong">
+                        <td scope="row">@loan.ClientID</td>
+                        <td>@loan.ClientFullName</td>
+                        <td>@(Math.Round(loan.LoanAmount))</td>
+                        <td>@loan.PayoutDate.Date.ToString("yyyy.MM.dd")</td>
+                    </tr>
+                }
+            </tbody>
+    </table>

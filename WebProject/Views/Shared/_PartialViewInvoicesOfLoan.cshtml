@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Invoice> 
+
+<table  class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Invoice No</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td scope="row">@item.OrderNr</td>
+                @{ string invoiceNumber = item.InvoiceNr.ToString();}
+                @while (item.InvoiceNr / 1000 >= 1)
+                {
+                    invoiceNumber = "0" + invoiceNumber;
+
+                    item.InvoiceNr *= 10;
+                }
+                <td>@invoiceNumber</td>
+
+                <td>@item.DueDate.ToString("yyyy.MM.dd")</td>
+                <td>@Math.Round(item.Amount)</td>
+            </tr>
+        }
+    </tbody>
+</table>

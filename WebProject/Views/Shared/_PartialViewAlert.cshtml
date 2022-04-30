@@ -1,0 +1,9 @@
+﻿@using Core.Dtos
+
+@model Message
+
+
+@foreach (var modelOne in Model.ResultMessages)
+{
+    <div id="alertNotification" class="alert alert-lg alert-@Model.AlertColor text-center">***&nbsp;@modelOne</div>
+}
